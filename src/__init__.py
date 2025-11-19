@@ -12491,18 +12491,7 @@ class Page:
         r = Rect(rect)
         if r.is_empty or r.is_infinite:
             raise ValueError("rect must be finite and not empty")
-        clip = r * ~page.transformation_matrix
-
-        # Create a unique image reference name.
-        ilst = [i[7] for i in doc.get_page_images(page.number)]
-        ilst += [i[1] for i in doc.get_page_xobjects(page.number)]
-        ilst += [i[4] for i in doc.get_page_fonts(page.number)]
-        n = "fzImg"  # 'pymupdf image'
-        i = 0
-        _imgname = n + "0"  # first name candidate
-        while _imgname in ilst:
-            i += 1
-            _imgname = n + str(i)  # try new name
+        _imgname = f"{n}{uuid.uuid4()}"
 
         if overlay:
             page.wrap_contents()  # ensure a balanced graphics state
